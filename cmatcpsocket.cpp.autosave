@@ -1,0 +1,6 @@
+#include "cmatcpsocket.h"
+
+CMaTcpSocket::CMaTcpSocket(QObject *parent) : QTcpSocket(parent)
+{
+
+}

@@ -1,0 +1,16 @@
+#ifndef CMATCPSOCKET_H
+#define CMATCPSOCKET_H
+
+#include <QObject>
+#include <QTcpSocket>
+
+class CMaTcpSocket : public QTcpSocket
+{
+public:
+    explicit CMaTcpSocket(QObject *parent = Q_NULLPTR);
+
+public slots:
+    void incomingConnection()
+};
+
+#endif // CMATCPSOCKET_H
