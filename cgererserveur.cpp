@@ -9,6 +9,13 @@ CGererServeur::CGererServeur(quint16 port, QObject *parent) : QObject(parent)
 
 CGererServeur::~CGererServeur()
 {
+    // effacement des threads
+    for (int i=0 ; i<liste_th.size() ; i++) {
+        liste_th.at(i)->quit();  // demande au thread de se terminer
+        liste_th.at(i)->wait();  // attends la fin de la boucle événements
+    } // for
+    liste_th.clear();
+    liste_gcl.clear();
     delete _serv;
 }
 
@@ -18,6 +25,7 @@ void CGererServeur::on_newConnection(qintptr sd)
     // La méthode héritée QTcpServer::incomingConnection() a été redéfinie.
     // création du thread et du gestionnaire de communication avec le client.
     QThread *th = new QThread();
+    th->setObjectName("servGcl_"+QString::number(sd));
     CGererClient *gcl = new CGererClient(sd, nullptr);  // il créera la socket de comm grace à sd
     // déplacement vers le thread
     gcl->moveToThread(th);
@@ -25,7 +33,7 @@ void CGererServeur::on_newConnection(qintptr sd)
     connect(gcl, &CGererClient::sig_aff, this, &CGererServeur::on_aff);
     connect(gcl, &CGererClient::sig_disconnected, this, &CGererServeur::on_disconnected); // provoque la destruction du clientet du thread
     connect(this, &CGererServeur::sig_goGestionClient, gcl, &CGererClient::on_goGestionClient); // provoque création socket client
-    connect(th, &QThread::finished, gcl, &QObject::deleteLater);
+    connect(th, &QThread::finished, gcl, &QObject::deleteLater); // The object will be deleted when control returns to the event loop
 
     th->start(); // départ boucle des événements du thread.
     emit sig_goGestionClient(); // Départ de la gestion du client

@@ -11,7 +11,7 @@ public:
     explicit CMonTcpServer(QObject *parent = Q_NULLPTR);
 
 protected:
-    void incomingConnection(qintptr sd); // réimplémentation
+    void incomingConnection(qintptr sd) override; // réimplémentation
 
 signals:
     void sig_sdClient(qintptr sd);
