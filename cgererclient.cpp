@@ -48,7 +48,7 @@ void CGererClient::on_readyRead()
     //QString all = _sock->readAll();
     emit sig_aff("IP Local="+_localAddress.toString()+" Port="+QString::number(_localPort));
     emit sig_aff(QString::number(nb)+" car reçus de IP="+_hostAddress.toString()+" Port="+QString::number(_peerPort)+" : "+all);
-    client->write("Bien reçu !\x0d\x0a", 13);
+    client->write("Bien reçu !\n\n", 13);
 }
 
 void CGererClient::on_disconnected()
